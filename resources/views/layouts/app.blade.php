@@ -44,7 +44,7 @@
                 <ul class="nav navbar-nav">
                     @if (Auth::check())
                     <li><a href="{{ url('/') }}">Home</a></li>
-                    <li><a href="{{ url('/search') }}">Search Symbol</a></li>
+                    <li><a href="{{ url('/search') }}">Search</a></li>
                     @endif
                 </ul>
 
