@@ -17,4 +17,5 @@ Route::get('/', 'HomeController@index');
 Route::get('/home', function () {
     return Redirect::to('/');
 });
-Route::get('/symbol/{symbol}', 'SymbolController@index');
+Route::get('/symbol', 'SymbolController@index');
+Route::get('/symbol/{symbol}', 'SymbolController@symbol');

@@ -20,14 +20,25 @@ class SymbolController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * List all stock.
      *
      * @param \App\StockSymbol $symbol
      * @return \Illuminate\Http\Response
      */
-    public function index (StockSymbol $symbol)
+    public function index ()
     {
-        $data['symbol'] = $symbol;
-        return view('symbol', $data);
+        $stocks = StockSymbol::all();
+        return view('symbol-list', compact('stocks'));
+    }
+
+    /**
+     * Show stock symbol.
+     *
+     * @param \App\StockSymbol $symbol
+     * @return \Illuminate\Http\Response
+     */
+    public function symbol (StockSymbol $symbol)
+    {
+        return view('symbol', compact('symbol'));
     }
 }
