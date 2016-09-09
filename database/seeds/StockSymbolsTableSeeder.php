@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Libralies\StockPrice;
 
-class DatabaseSeeder extends Seeder
+class StockSymbolsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UsersTableSeeder::class);
-        $this->call(StockSymbolsTableSeeder::class);
+        DB::table('stock_symbols')->insert(StockPrice::getAll());
     }
 }
