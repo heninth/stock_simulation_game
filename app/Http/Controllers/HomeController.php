@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Libralies\StockPrice;
+use App\Libraries\StockPrice;
 
 class HomeController extends Controller
 {

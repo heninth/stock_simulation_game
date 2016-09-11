@@ -17,5 +17,10 @@ Route::get('/', 'HomeController@index');
 Route::get('/home', function () {
     return Redirect::to('/');
 });
-Route::get('/symbol', 'SymbolController@index');
+Route::get('/symbol', function () {
+    return Redirect::to('/stock');
+});
+Route::get('/stock', 'SymbolController@index');
 Route::get('/symbol/{symbol}', 'SymbolController@symbol');
+Route::post('/symbol/{symbol}/buy', 'SymbolController@buy');
+Route::post('/symbol/{symbol}/sell', 'SymbolController@sell');

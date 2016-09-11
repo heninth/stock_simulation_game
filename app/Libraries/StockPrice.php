@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Libralies;
+namespace App\Libraries;
 
 use Symfony\Component\DomCrawler\Crawler;
 
