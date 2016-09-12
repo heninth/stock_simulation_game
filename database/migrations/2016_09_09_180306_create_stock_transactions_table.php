@@ -17,7 +17,7 @@ class CreateStockTransactionsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->string('symbol')->index();
-            $table->integer('volumn')->unsigned();
+            $table->integer('volume')->unsigned();
             $table->decimal('cost', 12, 2);
             $table->decimal('fee', 8, 2);
             $table->decimal('tax', 8, 2);

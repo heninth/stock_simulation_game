@@ -16,7 +16,7 @@ class CreateUserPortsTable extends Migration
         Schema::create('user_ports', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->index();
             $table->string('symbol')->index();
-            $table->integer('volumn')->unsigned();
+            $table->integer('volume')->unsigned();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('symbol')->references('symbol')->on('stock_symbols')->onDelete('cascade');
