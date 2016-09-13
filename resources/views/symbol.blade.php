@@ -3,49 +3,55 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-6">
             <h1>{{ $symbol->symbol }}</h1>
+        </div>
+        <div class="col-xs-6 right">
+            <h2>เงินสด : {{ $cash }} บาท</h2>
         </div>
     </div>
     <div class="row">
 
         <div class="col-md-6 col-xs-12">
+            @if ($errors->has('buy'))
+                <div class="alert alert-danger" role="alert">{{ $errors->first('buy') }}</div>
+            @endif
             <div class="panel panel-default">
-                <div class="panel-heading">Buy</div>
+                <div class="panel-heading">ซื้อ</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="/symbol/{{ $symbol->symbol }}/buy" id="buy">
                         {{ csrf_field() }}
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Price</label>
+                            <label class="col-md-4 control-label">ราคา</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static">{{ $symbol->close_price }}</span>
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('buy_volumn') ? ' has-error' : '' }}">
-                            <label for="buy_volumn" class="col-md-4 control-label">Volumn</label>
+                        <div class="form-group{{ $errors->has('buy_volume') ? ' has-error' : '' }}">
+                            <label for="buy_volume" class="col-md-4 control-label">จำนวน</label>
 
                             <div class="col-md-6">
-                                <input type="number" class="form-control" name="buy_volumn" value="{{ old('buy_volumn', '0') }}" min="0" step="1" required>
+                                <input type="number" class="form-control" name="buy_volume" value="{{ old('buy_volume', '0') }}" min="0" step="1" required>
 
-                                @if ($errors->has('buy_volumn'))
+                                @if ($errors->has('buy_volume'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('buy_volumn') }}</strong>
+                                        <strong>{{ $errors->first('buy_volume') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Fee ({{ $fee }}%)</label>
+                            <label class="col-md-4 control-label">ค่าธรรมเนียม ({{ $fee }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static fee">0</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Tax ({{ $tax }}% of Fee)</label>
+                            <label class="col-md-4 control-label">ภาษี ({{ $tax }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static tax">0</span>
@@ -53,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Total</label>
+                            <label class="col-md-4 control-label">รวม</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static total">0</span>
@@ -63,7 +69,7 @@
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-success">
-                                    Buy
+                                    ซื้อ
                                 </button>
                             </div>
                         </div>
@@ -74,58 +80,58 @@
 
         <div class="col-md-6 col-xs-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Sell</div>
+                <div class="panel-heading">ขาย</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="/symbol/{{ $symbol->symbol }}/sell" id="sell">
                         {{ csrf_field() }}
                         <input type="hidden" name="op" value="buy">
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Own</label>
+                            <label class="col-md-4 control-label">มีอยู่</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static">{{ $own->volumn or '0' }}</span>
+                                <span class="form-control-static">{{ $own->volume or '0' }}</span>
                             </div>
                         </div>
 
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Price</label>
+                            <label class="col-md-4 control-label">ราคา</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static">{{ $symbol->close_price }}</span>
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('sell_volumn') ? ' has-error' : '' }}">
-                            <label for="sell_volumn" class="col-md-4 control-label">Volumn</label>
+                        <div class="form-group{{ $errors->has('sell_volume') ? ' has-error' : '' }}">
+                            <label for="sell_volume" class="col-md-4 control-label">จำนวน</label>
 
                             <div class="col-md-6">
-                                <input type="number" class="form-control" name="sell_volumn" value="{{ old('sell_volumn', '0') }}" min="0" step="1" required>
+                                <input type="number" class="form-control" name="sell_volume" value="{{ old('sell_volume', '0') }}" min="0" step="1" required>
 
-                                @if ($errors->has('sell_volumn'))
+                                @if ($errors->has('sell_volume'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('sell_volumn') }}</strong>
+                                        <strong>{{ $errors->first('sell_volume') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Fee ({{ $fee }}%)</label>
+                            <label class="col-md-4 control-label">ค่าธรรมเนียม ({{ $fee }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static fee">0</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Tax ({{ $tax }}% of Fee)</label>
+                            <label class="col-md-4 control-label">ภาษี ({{ $tax }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static tax">0</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Total</label>
+                            <label class="col-md-4 control-label">รวม</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
                                 <span class="form-control-static total">0</span>
@@ -135,7 +141,7 @@
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-danger">
-                                    Sell
+                                    ขาย
                                 </button>
                             </div>
                         </div>
@@ -150,12 +156,32 @@
 
 @push('script')
 <script type="text/javascript">
-    var fee = {{ $fee / 100 }};
-    var tax = {{ $tax /100 }};
+    var price = {{ $symbol->close_price }};
+    var fee_rate = {{ $fee / 100 }};
+    var tax_rate = {{ $tax /100 }};
     $(document).ready(function () {
-        $('input[name="volumn"]').change(function (e) {
+        $('input[name="buy_volume"]').change(function (e) {
             var type = e.target.parentNode.parentNode.parentNode.id;
-        })
+            var volume = $('#'+type+' input[type=number]').val();
+            var cost = Math.round((volume * price) * 100) / 100;
+            var fee =  Math.round((cost * fee_rate) * 100) / 100;
+            var tax =  Math.round((fee * tax_rate) * 100) / 100;
+            var total =  Math.round((cost + fee + tax) * 100) / 100;
+            $('#'+type+' .fee').text(fee);
+            $('#'+type+' .tax').text(tax);
+            $('#'+type+' .total').text(total);
+        });
+        $('input[name="sell_volume"]').change(function (e) {
+            var type = e.target.parentNode.parentNode.parentNode.id;
+            var volume = $('#'+type+' input[type=number]').val();
+            var cost = Math.round((volume * price) * 100) / 100;
+            var fee =  Math.round((cost * fee_rate) * 100) / 100;
+            var tax =  Math.round((fee * tax_rate) * 100) / 100;
+            var total =  Math.round((cost - fee - tax) * 100) / 100;
+            $('#'+type+' .fee').text(fee);
+            $('#'+type+' .tax').text(tax);
+            $('#'+type+' .total').text(total);
+        });
     });
 </script>
 @endpush

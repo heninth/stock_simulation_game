@@ -7,9 +7,9 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <td>Symbol</td>
-                        <td>Price</td>
-                        <td>Buy / Sell</td>
+                        <td>สัญลักษณ์</td>
+                        <td>ราคา</td>
+                        <td>ซื้อ / ขาย</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,10 +18,14 @@
                             <td>{{ $symbol->symbol }}</td>
                             @if ($symbol->is_suspended)
                                 <td> - </td>
-                                <td><a href="#" class="btn btn-default" disabled>Buy / Sell</a></td>
+                                <td><a href="#" class="btn btn-default" disabled>การซื้อขายถูกระงับ</a></td>
                             @else
                                 <td>{{ $symbol->close_price }}</td>
-                                <td><a href="{{ url('/symbol/'.$symbol->symbol) }}" class="btn btn-default">Buy / Sell</a></td>
+                                @if ($symbol->close_price < 10)
+                                    <td><a href="{{ url('/symbol/'.$symbol->symbol) }}" class="btn btn-default">ขาย</a></td>
+                                @else
+                                    <td><a href="{{ url('/symbol/'.$symbol->symbol) }}" class="btn btn-default">ซื้อ / ขาย</a></td>
+                                @endif
                             @endif
                         </tr>
                     @endforeach
