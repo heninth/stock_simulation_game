@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Libraries\StockPrice;
 
 class HomeController extends Controller
 {
@@ -24,7 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $stocks = StockPrice::getAll();
-        return view('home', compact('stocks'));
+        return view('home');
     }
 }
