@@ -22,6 +22,7 @@ class CreateStockTransactionsTable extends Migration
             $table->decimal('cost', 12, 2);
             $table->decimal('fee', 8, 2);
             $table->decimal('tax', 8, 2);
+            $table->decimal('total', 12, 2);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

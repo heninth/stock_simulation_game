@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Libraries\StockPrice;
+use App\Services\StockPrice;
 
 class StockSymbolsTableSeeder extends Seeder
 {
