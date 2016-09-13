@@ -12,7 +12,7 @@ class SettingsTabelSeeder extends Seeder
     public function run()
     {
         DB::table('settings')->insert([
-            ['key' => 'fee', 'value' => 0.02],
+            ['key' => 'fee', 'value' => 0.2],
             ['key' => 'tax', 'value' => 7],
         ]);
     }
