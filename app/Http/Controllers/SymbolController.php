@@ -108,7 +108,7 @@ class SymbolController extends Controller
                 return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
                 DB::rollBack();
             } else {
-                if (!UserPort::where('user_id', $user_id)->where('symbol', $symbol->symbol)) {
+                if (!UserPort::where([['user_id', $user_id],['symbol' , $symbol->symbol]])->first()) {
                     UserPort::insert([
                         'user_id' => $user_id,
                         'symbol' => $symbol->symbol,
@@ -117,7 +117,7 @@ class SymbolController extends Controller
                 }
                 UserPort::where([
                     ['user_id', $user_id],
-                    ['symbol' , $symbol->symbol,]
+                    ['symbol' , $symbol->symbol]
                 ])->increment('volume', $volume);
                 $transaction = new StockTransaction;
                 $transaction->user_id = $user_id;

@@ -16,6 +16,7 @@ class CreateStockSymbolsTable extends Migration
         Schema::create('stock_symbols', function (Blueprint $table) {
             $table->string('symbol')->primary();
             $table->decimal('close_price', 6, 2);
+            $table->enum('market', ['SET', 'mai']);
             $table->boolean('is_suspended')->default(false);
         });
     }

@@ -13,11 +13,17 @@ class StockPrice
      */
     public static function getAll ()
     {
-        $html = file_get_contents('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S');
+        $stocks = static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S', 'SET');
+        $stocks = array_merge($stocks, static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=mai&type=S', 'mai'));
+        return $stocks;
+    }
+
+    private static function crawler($url, $market)
+    {
+        $html = file_get_contents($url);
         $crawler = new Crawler($html);
 
-        $stocks = $crawler->filter('#maincontent > .row > .row')->eq(1)->filter('tbody > tr')->each(function (Crawler $node, $i) {
-
+        return $crawler->filter('#maincontent > .row > .row')->eq(1)->filter('tbody > tr')->each(function (Crawler $node, $i) use($market) {
             $symbol = preg_replace('/[^A-Za-z0-9\-\&]/', ' ', $node->filter('td')->eq(0)->text());
             $symbol = trim($symbol);
             $data['symbol'] = html_entity_decode($symbol);
@@ -28,11 +34,9 @@ class StockPrice
                 $data['close_price'] = '0.00';
                 $data['is_suspended'] = true;
             }
-
+            $data['market'] = $market;
             return $data;
         });
-        //dd($stocks);
-        return $stocks;
     }
 }
 
