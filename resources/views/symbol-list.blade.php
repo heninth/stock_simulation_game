@@ -27,7 +27,7 @@
                                     <td> - </td>
                                     <td><a href="#" class="btn btn-default" disabled>การซื้อขายถูกระงับ</a></td>
                                 @else
-                                    <td>{{ $symbol->close_price }}</td>
+                                    <td class="money">{{ $symbol->close_price }}</td>
                                     @if ($symbol->close_price < 10)
                                         <td><a href="{{ url('/symbol/'.$symbol->symbol) }}" class="btn btn-default">ขาย</a></td>
                                     @else
@@ -60,7 +60,7 @@
                                     <td> - </td>
                                     <td><a href="#" class="btn btn-default" disabled>การซื้อขายถูกระงับ</a></td>
                                 @else
-                                    <td>{{ $symbol->close_price }}</td>
+                                    <td class="money">{{ $symbol->close_price }}</td>
                                     @if ($symbol->close_price < 10)
                                         <td><a href="{{ url('/symbol/'.$symbol->symbol) }}" class="btn btn-default">ขาย</a></td>
                                     @else

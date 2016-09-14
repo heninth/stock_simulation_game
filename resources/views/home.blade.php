@@ -8,8 +8,8 @@
                 <div class="panel-heading">Summary</div>
 
                 <div class="panel-body">
-                    <span>Portfolio Value: {{ $user->port_value }} บาท</span><br>
-                    <span>Cash: {{ $user->cash }} บาท</span>
+                    <span>Portfolio Value: <span class="money">{{ $user->port_value }}</span> บาท</span><br>
+                    <span>Cash: <span class="money">{{ $user->cash }}</span> บาท</span>
                 </div>
             </div>
         </div>
@@ -29,14 +29,14 @@
                     <tr>
                         <td>{{ $stock->symbol }}</td>
                         <td>{{ $stock->symbol()->first()->market }}</td>
-                        <td>{{ $stock->volume }}</td>
+                        <td class="volume">{{ $stock->volume }}</td>
                         @if ($stock->symbol()->first()->is_suspended)
                             <td> - </td>
                             <td> - </td>
                             <td><a href="#" class="btn btn-default" disabled>การซื้อขายถูกระงับ</a></td>
                         @else
-                            <td>{{ $stock->symbol()->first()->close_price }}</td>
-                            <td>{{ $stock->symbol()->first()->close_price * $stock->volume }}</td>
+                            <td class="money">{{ $stock->symbol()->first()->close_price }}</td>
+                            <td class="money">{{ $stock->symbol()->first()->close_price * $stock->volume }}</td>
                             @if ($stock->symbol()->first()->close_price < 10)
                                 <td><a href="{{ url('/symbol/'.$stock->symbol) }}" class="btn btn-default">ขาย</a></td>
                             @else
@@ -50,3 +50,16 @@
     </div>
 </div>
 @endsection
+
+@push('script')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.money').each(function(i, el) {
+            el.textContent = Number(el.textContent).formatMoney();
+        });
+        $('.volume').each(function(i, el) {
+            el.textContent = Number(el.textContent).formatMoney(0);
+        });
+    });
+</script>
+@endpush

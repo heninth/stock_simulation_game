@@ -7,7 +7,7 @@
             <h1>{{ $symbol->symbol }}</h1>
         </div>
         <div class="col-xs-6 right">
-            <h2>เงินสด : {{ $cash }} บาท</h2>
+            <h2>เงินสด : <span class="money">{{ $cash }}</span> บาท</h2>
         </div>
     </div>
     <div class="row">
@@ -25,7 +25,7 @@
                             <label class="col-md-4 control-label">ราคา</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static">{{ $symbol->close_price }}</span>
+                                <span class="form-control-static money">{{ $symbol->close_price }}</span>
                             </div>
                         </div>
 
@@ -47,14 +47,14 @@
                             <label class="col-md-4 control-label">ค่าธรรมเนียม ({{ $fee }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static fee">0</span>
+                                <span class="form-control-static fee money">0</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">ภาษี ({{ $tax }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static tax">0</span>
+                                <span class="form-control-static tax money">0</span>
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                             <label class="col-md-4 control-label">รวม</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static total">0</span>
+                                <span class="form-control-static total money">0</span>
                             </div>
                         </div>
 
@@ -98,7 +98,7 @@
                             <label class="col-md-4 control-label">ราคา</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static">{{ $symbol->close_price }}</span>
+                                <span class="form-control-static money">{{ $symbol->close_price }}</span>
                             </div>
                         </div>
 
@@ -120,21 +120,21 @@
                             <label class="col-md-4 control-label">ค่าธรรมเนียม ({{ $fee }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static fee">0</span>
+                                <span class="form-control-static fee money">0</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">ภาษี ({{ $tax }}%)</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static tax">0</span>
+                                <span class="form-control-static tax money">0</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">รวม</label>
 
                             <div class="col-md-6" style="padding-top: 6px;">
-                                <span class="form-control-static total">0</span>
+                                <span class="form-control-static total money">0</span>
                             </div>
                         </div>
 
@@ -167,9 +167,9 @@
             var fee =  Math.round((cost * fee_rate) * 100) / 100;
             var tax =  Math.round((fee * tax_rate) * 100) / 100;
             var total =  Math.round((cost + fee + tax) * 100) / 100;
-            $('#'+type+' .fee').text(fee);
-            $('#'+type+' .tax').text(tax);
-            $('#'+type+' .total').text(total);
+            $('#'+type+' .fee').text(fee.formatMoney());
+            $('#'+type+' .tax').text(tax.formatMoney());
+            $('#'+type+' .total').text(total.formatMoney());
         });
         $('input[name="sell_volume"]').change(function (e) {
             var type = e.target.parentNode.parentNode.parentNode.id;
@@ -178,9 +178,9 @@
             var fee =  Math.round((cost * fee_rate) * 100) / 100;
             var tax =  Math.round((fee * tax_rate) * 100) / 100;
             var total =  Math.round((cost - fee - tax) * 100) / 100;
-            $('#'+type+' .fee').text(fee);
-            $('#'+type+' .tax').text(tax);
-            $('#'+type+' .total').text(total);
+            $('#'+type+' .fee').text(fee.formatMoney());
+            $('#'+type+' .tax').text(tax.formatMoney());
+            $('#'+type+' .total').text(total.formatMoney());
         });
     });
 </script>
