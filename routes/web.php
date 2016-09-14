@@ -24,3 +24,5 @@ Route::get('/stock', 'SymbolController@index');
 Route::get('/symbol/{symbol}', 'SymbolController@symbol');
 Route::post('/symbol/{symbol}/buy', 'SymbolController@buy');
 Route::post('/symbol/{symbol}/sell', 'SymbolController@sell');
+
+Route::get('/history', 'TradeHistoryController@index');

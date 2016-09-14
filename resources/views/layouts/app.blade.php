@@ -45,6 +45,7 @@
                     @if (Auth::check())
                     <li><a href="{{ url('/') }}">Home</a></li>
                     <li><a href="{{ url('/symbol') }}">Stock Market</a></li>
+                    <li><a href="{{ url('/history') }}">Trade History</a></li>
                     @endif
                 </ul>
 
