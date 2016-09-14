@@ -104,9 +104,9 @@ class SymbolController extends Controller
         try {
             User::where('id', $user_id)->decrement('cash', $total);
             if (User::where('id', $user_id)->first()->cash < 0) {
+                DB::rollBack();
                 $validator->messages()->add('buy_volume', 'เงินสดไม่พอ');
                 return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
-                DB::rollBack();
             } else {
                 if (!UserPort::where([['user_id', $user_id],['symbol' , $symbol->symbol]])->first()) {
                     UserPort::insert([
@@ -183,7 +183,6 @@ class SymbolController extends Controller
             if ($volume > $own) {
                 $validator->messages()->add('sell_volume', 'มากกว่าจำนวนที่มีอยู่');
                 return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
-                DB::rollBack();
             } else {
                 UserPort::where([
                     ['user_id', $user_id],
