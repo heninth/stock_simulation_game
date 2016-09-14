@@ -189,6 +189,7 @@ class SymbolController extends Controller
                     ['user_id', $user_id],
                     ['symbol' , $symbol->symbol,]
                 ])->decrement('volume', $volume);
+                User::where('id', $user_id)->increment('cash', $total);
                 $transaction = new StockTransaction;
                 $transaction->user_id = $user_id;
                 $transaction->symbol = $symbol->symbol;
