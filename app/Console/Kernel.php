@@ -5,6 +5,9 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use DB;
+use App\Services\StockPrice;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -24,8 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function () {
+            DB::table('stock_symbols')->insert(StockPrice::getAll());
+        })->daily('17:00');
     }
 
     /**
