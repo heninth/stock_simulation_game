@@ -12,4 +12,9 @@ class UserPort extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function symbol()
+    {
+        return $this->belongsTo('App\StockSymbol', 'symbol', 'symbol');
+    }
 }
