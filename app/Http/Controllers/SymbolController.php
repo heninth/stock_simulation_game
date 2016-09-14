@@ -48,7 +48,7 @@ class SymbolController extends Controller
     public function symbol (StockSymbol $symbol)
     {
         if ($symbol->is_suspended) {
-            return 'Trade suspended';
+            return 'การซื้อขายถูกระงับ';
         } else {
             $own = UserPort::where([
                     ['user_id', Auth::user()->id],
@@ -70,7 +70,7 @@ class SymbolController extends Controller
     public function buy (Request $request, StockSymbol $symbol)
     {
         // Validate
-        if ($symbol->is_suspended) return 'Trade suspended';
+        if ($symbol->is_suspended) return 'การซื้อขายถูกระงับ';
         if ($symbol->close_price < 10) {
             return redirect('symbol/'.$symbol->symbol)->withErrors(['buy' => 'ราคาหุ้น ณ วันที่ซื้อ ต้องไม่ต่ำกว่า 10 บาท']);
         }
@@ -149,7 +149,7 @@ class SymbolController extends Controller
     public function sell (Request $request, StockSymbol $symbol)
     {
         // validate
-        if ($symbol->is_suspended) return 'Trade suspended';
+        if ($symbol->is_suspended) return 'การซื้อขายถูกระงับ';
         if ($request->input('sell_volume') % 100 != 0) {
             return redirect('symbol/'.$symbol->symbol)->withErrors(['sell_volume' => 'ต้องเป็นจำนวนเท่าของ 100']);
         }
