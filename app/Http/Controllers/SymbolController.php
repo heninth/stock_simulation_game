@@ -131,7 +131,7 @@ class SymbolController extends Controller
                 $transaction->save();
 
                 DB::commit();
-                PortValue::update(Auth::user());
+                PortValue::update($user_id);
             }
         } catch (\Exception $e) {
             dd($e);
@@ -202,7 +202,7 @@ class SymbolController extends Controller
                 $transaction->save();
 
                 DB::commit();
-                PortValue::update(Auth::user());
+                PortValue::update($user_id);
             }
         } catch (\Exception $e) {
             dd($e);
