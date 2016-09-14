@@ -17,7 +17,7 @@ class PortValue
     public static function update (User $user)
     {
         $portValue = $user->cash;
-        foreach ($user->stocks() as $stock) {
+        foreach ($user->stocks()->get() as $stock) {
             $portValue += $stock->volume * StockSymbol::find($stock->symbol)->close_price;
         }
         $user->port_value = $portValue;
