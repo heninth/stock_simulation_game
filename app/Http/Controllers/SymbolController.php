@@ -69,6 +69,7 @@ class SymbolController extends Controller
      */
     public function buy (Request $request, StockSymbol $symbol)
     {
+        // Validate
         if ($symbol->is_suspended) return 'Trade suspended';
         if ($symbol->close_price < 10) {
             return redirect('symbol/'.$symbol->symbol)->withErrors(['buy' => 'ราคาหุ้น ณ วันที่ซื้อ ต้องไม่ต่ำกว่า 10 บาท']);
@@ -88,6 +89,7 @@ class SymbolController extends Controller
         if ($cost < 10000) {
             return redirect('symbol/'.$symbol->symbol)->withErrors(['buy' => 'มูลค่าต้องไม่ต่ำกว่า 10,000 บาท']);
         }
+        // end validate
 
         $fee_rate = floatval(Setting::key('fee')) / 100;
         $tax_rate = floatval(Setting::key('tax')) / 100;
@@ -98,49 +100,115 @@ class SymbolController extends Controller
 
         $user_id = Auth::user()->id;
 
-        if ($total <= User::where('id', $user_id)->first()->cash) {
-            DB::beginTransaction();
-            try {
-                User::where('id', $user_id)->decrement('cash', $total);
-                if (User::where('id', $user_id)->first()->cash < 0) {
-                    $validator->messages()->add('buy_volume', 'เงินสดไม่พอ');
-                    return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
-                    DB::rollBack();
-                } else {
-                    $stock = UserPort::where('user_id', $user_id)->where('symbol', $symbol->symbol)->first();
-                    if (!$stock) {
-                        UserPort::insert([
-                            'user_id' => $user_id,
-                            'symbol' => $symbol->symbol,
-                            'volume' => 0
-                        ]);
-                    }
-                    UserPort::where([
-                        ['user_id', $user_id],
-                        ['symbol' , $symbol->symbol,]
-                    ])->increment('volume', $volume);
-                    $transaction = new StockTransaction;
-                    $transaction->user_id = $user_id;
-                    $transaction->symbol = $symbol->symbol;
-                    $transaction->type = 'buy';
-                    $transaction->volume = $volume;
-                    $transaction->cost = $cost;
-                    $transaction->fee = $fee;
-                    $transaction->tax = $tax;
-                    $transaction->total = $total;
-                    $transaction->save();
-
-                    DB::commit();
-                    PortValue::update(Auth::user());
+        DB::beginTransaction();
+        try {
+            User::where('id', $user_id)->decrement('cash', $total);
+            if (User::where('id', $user_id)->first()->cash < 0) {
+                $validator->messages()->add('buy_volume', 'เงินสดไม่พอ');
+                return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
+                DB::rollBack();
+            } else {
+                if (!UserPort::where('user_id', $user_id)->where('symbol', $symbol->symbol)) {
+                    UserPort::insert([
+                        'user_id' => $user_id,
+                        'symbol' => $symbol->symbol,
+                        'volume' => 0
+                    ]);
                 }
-            } catch (\Exception $e) {
+                UserPort::where([
+                    ['user_id', $user_id],
+                    ['symbol' , $symbol->symbol,]
+                ])->increment('volume', $volume);
+                $transaction = new StockTransaction;
+                $transaction->user_id = $user_id;
+                $transaction->symbol = $symbol->symbol;
+                $transaction->type = 'buy';
+                $transaction->volume = $volume;
+                $transaction->cost = $cost;
+                $transaction->fee = $fee;
+                $transaction->tax = $tax;
+                $transaction->total = $total;
+                $transaction->save();
 
+                DB::commit();
+                PortValue::update(Auth::user());
             }
-        } else {
-            $validator->messages()->add('buy_volume', 'เงินสดไม่พอ');
-            return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
+        } catch (\Exception $e) {
+            dd($e);
         }
+
         return redirect('symbol/'.$symbol->symbol);
     }
+
+    /**
+     * Sell stock.
+     *
+     * @param \App\StockSymbol $symbol
+     * @return \Illuminate\Http\Response
+     */
+    public function sell (Request $request, StockSymbol $symbol)
+    {
+        // validate
+        if ($symbol->is_suspended) return 'Trade suspended';
+        if ($request->input('sell_volume') % 100 != 0) {
+            return redirect('symbol/'.$symbol->symbol)->withErrors(['sell_volume' => 'ต้องเป็นจำนวนเท่าของ 100']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'sell_volume' => 'bail|required|numeric|min:100'
+        ]);
+        $validator->validate();
+
+        $volume = intval($request->input('sell_volume'));
+        $cost = $volume * $symbol->close_price;
+        if ($cost < 10000) {
+            return redirect('symbol/'.$symbol->symbol)->withErrors(['sell' => 'มูลค่าต้องไม่ต่ำกว่า 10,000 บาท']);
+        }
+        // end validate
+        $own = UserPort::where([
+                ['user_id', Auth::user()->id],
+                ['symbol', $symbol->symbol]
+        ])->first()->volume;
+        $fee_rate = floatval(Setting::key('fee')) / 100;
+        $tax_rate = floatval(Setting::key('tax')) / 100;
+        $cost = round($cost, 2);
+        $fee = round($cost * $fee_rate, 2);
+        $tax = round($fee * $tax_rate, 2);
+        $total = round($cost - $fee - $tax, 2);
+
+        $user_id = Auth::user()->id;
+
+        DB::beginTransaction();
+        try {
+            if ($volume > $own) {
+                $validator->messages()->add('sell_volume', 'มากกว่าจำนวนที่มีอยุ่');
+                return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
+                DB::rollBack();
+            } else {
+                UserPort::where([
+                    ['user_id', $user_id],
+                    ['symbol' , $symbol->symbol,]
+                ])->decrement('volume', $volume);
+                $transaction = new StockTransaction;
+                $transaction->user_id = $user_id;
+                $transaction->symbol = $symbol->symbol;
+                $transaction->type = 'sell';
+                $transaction->volume = $volume;
+                $transaction->cost = $cost;
+                $transaction->fee = $fee;
+                $transaction->tax = $tax;
+                $transaction->total = $total;
+                $transaction->save();
+
+                DB::commit();
+                PortValue::update(Auth::user());
+            }
+        } catch (\Exception $e) {
+            dd($e);
+        }
+
+        return redirect('symbol/'.$symbol->symbol);
+    }
+
 
 }
