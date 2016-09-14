@@ -3,6 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            แสดง :
+            <input type="checkbox" onclick="$('.s').toggle();" checked> การซื้อขายที่ถูกระงับ |
+            <input type="checkbox" onclick="$('.less_ten').toggle();" checked> ราคาต่ำกว่า 10
+        </div>
         <div class="col-md-6 col-xs-6">
             <h1>SET</h1>
             <table class="table table-hover">
@@ -16,7 +21,7 @@
                 <tbody>
                     @foreach($stocks as $symbol)
                         @if ($symbol->market == 'SET')
-                            <tr>
+                            <tr class="symbol{{ $symbol->is_suspended ? ' s' : ($symbol->close_price < 10 ? ' less_ten' : '')}}">
                                 <td>{{ $symbol->symbol }}</td>
                                 @if ($symbol->is_suspended)
                                     <td> - </td>
@@ -49,7 +54,7 @@
                 <tbody>
                     @foreach($stocks as $symbol)
                         @if ($symbol->market == 'mai')
-                            <tr>
+                            <tr class="symbol{{ $symbol->is_suspended ? ' s' : ($symbol->close_price < 10 ? ' less_ten' : '')}}">
                                 <td>{{ $symbol->symbol }}</td>
                                 @if ($symbol->is_suspended)
                                     <td> - </td>
