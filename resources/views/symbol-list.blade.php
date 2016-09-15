@@ -8,7 +8,7 @@
             <input type="checkbox" onclick="$('.s').toggle();" checked> การซื้อขายที่ถูกระงับ |
             <input type="checkbox" onclick="$('.less_ten').toggle();" checked> ราคาต่ำกว่า 10
         </div>
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-6 col-xs-12">
             <h1>SET</h1>
             <table class="table table-hover">
                 <thead>
@@ -41,7 +41,7 @@
             </table>
         </div>
 
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-6 col-xs-12">
             <h1>mai</h1>
             <table class="table table-hover">
                 <thead>
