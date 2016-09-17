@@ -13,8 +13,11 @@ class StockPrice
      */
     public static function getAll ()
     {
-        $stocks = static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S', 'SET');
-        $stocks = array_merge($stocks, static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=mai&type=S', 'mai'));
+        $set = static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S', 'SET');
+        if ($set == false) return false;
+        $mai = static::crawler('http://marketdata.set.or.th/mkt/commonstocklistresult.do?market=mai&type=S', 'mai');
+        if ($mai == false) return false;
+        $stocks = array_merge($set, $mai);
         return $stocks;
     }
 
@@ -29,7 +32,8 @@ class StockPrice
             )
         );
         $context = stream_context_create($opts);
-        $html = file_get_contents($url, false, $context);
+        @$html = file_get_contents($url, false, $context);
+        if ($html == false) return false;
         $crawler = new Crawler($html);
 
         return $crawler->filter('#maincontent > .row > .row')->eq(1)->filter('tbody > tr')->each(function (Crawler $node, $i) use($market) {

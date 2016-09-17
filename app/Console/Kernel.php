@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use DB;
 use App\Services\StockPrice;
+use App\Console\Commands\UpdateStockPrice;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,7 +17,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        UpdateStockPrice::class
     ];
 
     /**
@@ -27,9 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            DB::table('stock_symbols')->insert(StockPrice::getAll());
-        })->daily('17:00');
+        /*$schedule->call(function () {
+
+        })->daily('17:00');*/
     }
 
     /**
