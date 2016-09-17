@@ -182,6 +182,9 @@
             $('#'+type+' .tax').text(tax.formatMoney());
             $('#'+type+' .total').text(total.formatMoney());
         });
+        $('.money').each(function(i, el) {
+            el.textContent = Number(el.textContent).formatMoney();
+        });
     });
 </script>
 @endpush
