@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = User::find(Auth::user()->id);
-        $stocks = UserPort::where('user_id', $user->id)->orderBy('symbol', 'asc')->get();
+        $stocks = UserPort::where([['user_id', $user->id],['volume', '>', 0]])->orderBy('symbol', 'asc')->get();
         //dd($stocks[0]->symbol()->first()->);
         return view('home', compact('stocks', 'user'));
     }
