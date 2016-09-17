@@ -61,6 +61,7 @@ class UpdateStockPrice extends Command
         if (!$this->option('schedule')) $bar = $this->output->createProgressBar(count($stocks));
         foreach ($stocks as $stock) {
                 $s = StockSymbol::firstOrNew(['symbol' => $stock['symbol']]);
+                $s->market = $stock['market'];
                 $s->close_price = $stock['close_price'];
                 $s->is_suspended = $stock['is_suspended'];
                 $s->save();
