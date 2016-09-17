@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('update:stockprice')->daily('17:01');
+        $schedule->command('update:stockprice')->dailyAt('17:01')->appendOutputTo('storage/logs/update_stockprice.log');
     }
 
     /**
