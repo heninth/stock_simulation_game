@@ -15,6 +15,15 @@ class StockSymbol extends Model
   public $incrementing = false;
 
   /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = [
+      'symbol', 'close_price', 'is_suspened'
+  ];
+
+  /**
    * Indicates if the model should be timestamped.
    *
    * @var bool

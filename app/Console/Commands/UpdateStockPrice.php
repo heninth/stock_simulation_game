@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use DB;
 use App\StockSymbol;
 use App\Services\StockPrice;
 use App\Services\PortValue;
