@@ -15,7 +15,7 @@ class UpdateStockPrice extends Command
      *
      * @var string
      */
-    protected $signature = 'update:stockprice';
+    protected $signature = 'update:stockprice {--schedule}';
 
     /**
      * The console command description.
@@ -41,7 +41,7 @@ class UpdateStockPrice extends Command
      */
     public function handle()
     {
-        $max_attempts = 10;
+        $max_attempts = 20;
         $attempts = 0;
 
         do {
@@ -56,26 +56,26 @@ class UpdateStockPrice extends Command
 
         } while ($attempts < $max_attempts);
 
-        $this->line("\nUpdate stock price.");
-        $bar = $this->output->createProgressBar(count($stocks));
+        if (!$this->option('schedule')) $this->line("\nUpdate stock price.");
+        if (!$this->option('schedule')) $bar = $this->output->createProgressBar(count($stocks));
         foreach ($stocks as $stock) {
                 DB::table('stock_symbols')->where('symbol', $stock['symbol'])->update([
                     'close_price' => $stock['close_price'],
                     'is_suspended' => $stock['is_suspended']
                 ]);
-                $bar->advance();
+                if (!$this->option('schedule')) $bar->advance();
         }
-        $bar->finish();
-
+        if (!$this->option('schedule')) $bar->finish();
         $this->info("\nUpdate stock price.");
-        $this->line("\nUpdate user port.");
+
+        if (!$this->option('schedule')) $this->line("\nUpdate user port.");
         $users = DB::table('users')->select('id')->get();
-        $bar = $this->output->createProgressBar(count($users));
+        if (!$this->option('schedule')) $bar = $this->output->createProgressBar(count($users));
         foreach ($users as $user) {
             PortValue::update($user->id);
-            $bar->advance();
+            if (!$this->option('schedule')) $bar->advance();
         }
-        $bar->finish();
+        if (!$this->option('schedule')) $bar->finish();
         $this->info("\nUpdate user port.");
 
     }
