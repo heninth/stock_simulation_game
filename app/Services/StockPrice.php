@@ -20,7 +20,16 @@ class StockPrice
 
     private static function crawler($url, $market)
     {
-        $html = file_get_contents($url);
+        $opts = array(
+            'http'=> array(
+                'header' => "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0\r\n"
+                . "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
+                . "Accept-Encoding:gzip, deflate\r\n"
+                . "Accept-Language:th,en-US,en;q=0.5\r\n"
+            )
+        );
+        $context = stream_context_create($opts);
+        $html = file_get_contents($url, false, $context);
         $crawler = new Crawler($html);
 
         return $crawler->filter('#maincontent > .row > .row')->eq(1)->filter('tbody > tr')->each(function (Crawler $node, $i) use($market) {
