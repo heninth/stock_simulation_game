@@ -17,6 +17,12 @@ class CreateSettingsTable extends Migration
             $table->char('key')->primary();
             $table->text('value')->nullable();
         });
+
+        DB::table('settings')->insert([
+            ['key' => 'fee', 'value' => '0.2'],
+            ['key' => 'tax', 'value' => '7'],
+            ['key' => 'use_time_restriction', 'value' => '1'],
+        ]);
     }
 
     /**
