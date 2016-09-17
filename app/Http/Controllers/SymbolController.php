@@ -182,6 +182,7 @@ class SymbolController extends Controller
         DB::beginTransaction();
         try {
             if ($volume > $own) {
+                DB::rollBack();
                 $validator->messages()->add('sell_volume', 'มากกว่าจำนวนที่มีอยู่');
                 return redirect('symbol/'.$symbol->symbol)->withErrors($validator);
             } else {
