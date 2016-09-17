@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use DB;
 
+use App\StockSymbol;
 use App\Services\StockPrice;
 use App\Services\PortValue;
 
@@ -59,10 +59,10 @@ class UpdateStockPrice extends Command
         if (!$this->option('schedule')) $this->line("\nUpdate stock price.");
         if (!$this->option('schedule')) $bar = $this->output->createProgressBar(count($stocks));
         foreach ($stocks as $stock) {
-                DB::table('stock_symbols')->where('symbol', $stock['symbol'])->update([
-                    'close_price' => $stock['close_price'],
-                    'is_suspended' => $stock['is_suspended']
-                ]);
+                $s = StockSymbol::firstOrNew(['symbol' => $stock['symbol']]);
+                $s->close_price = $stock['close_price'];
+                $s->is_suspended = $stock['is_suspended'];
+                $s->save();
                 if (!$this->option('schedule')) $bar->advance();
         }
         if (!$this->option('schedule')) $bar->finish();
