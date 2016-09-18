@@ -72,8 +72,8 @@ class SymbolController extends Controller
     {
         // Validate
         if ($symbol->is_suspended) return 'การซื้อขายถูกระงับ';
-        if ($symbol->close_price < 10) {
-            return redirect('symbol/'.$symbol->symbol)->withErrors(['buy' => 'ราคาหุ้น ณ วันที่ซื้อ ต้องไม่ต่ำกว่า 10 บาท']);
+        if ($symbol->close_price < 5) {
+            return redirect('symbol/'.$symbol->symbol)->withErrors(['buy' => 'ราคาหุ้น ณ วันที่ซื้อ ต้องไม่ต่ำกว่า 5 บาท']);
         }
         if ($request->input('buy_volume') % 100 != 0) {
             return redirect('symbol/'.$symbol->symbol)->withErrors(['buy_volume' => 'ต้องเป็นจำนวนเท่าของ 100']);
