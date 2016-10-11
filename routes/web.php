@@ -26,3 +26,6 @@ Route::post('/symbol/{symbol}/buy', 'SymbolController@buy');
 Route::post('/symbol/{symbol}/sell', 'SymbolController@sell');
 
 Route::get('/history', 'TradeHistoryController@index');
+
+Route::get('/admin', 'AdminController@index');
+Route::get('/admin/{user}', 'AdminController@detail');

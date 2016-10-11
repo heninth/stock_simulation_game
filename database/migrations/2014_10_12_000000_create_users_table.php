@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->decimal('cash', 12, 2)->default(0);
             $table->decimal('port_value', 12, 2)->default(0);
+            $table->boolean('admin')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
